@@ -2,7 +2,7 @@
 function Header() {
     return (
         <div className="App">
-            <h1>Mariapaz Gomez</h1>
+            <h3>Mariapaz Gomez</h3>
         </div>
     );
 }
