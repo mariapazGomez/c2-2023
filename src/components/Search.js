@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import ApiService from "./ApiService";
+import SaveButton from "./SaveButton";
 
-// Función dummy para simular la respuesta del API
 const getDummyGeoInfo = (ipv4) => {
     return new Promise((resolve) => {
-        // Simulación de un retardo de 1 segundo
         setTimeout(() => {
             const dummyData = {
                 ip: ipv4,
@@ -37,16 +36,13 @@ const Search = () => {
     const handleSearch = async () => {
         setIsLoading(true);
         setError(null);
+
         try {
             if (!isValidIPv4) {
                 return;
             }
-
-            const data = await ApiService.getGeoInfo(ipv4);
-            if (data && data.status !== "OK") {
-                throw new Error("Error en la respuesta del servicio");
-            }
-
+            // const data = await ApiService.getGeoInfo(ipv4);
+            const data = await getDummyGeoInfo(ipv4);
             setGeoInfo(data);
         } catch (error) {
             setError("Error al obtener la información");
@@ -81,6 +77,7 @@ const Search = () => {
                     <p>Proveedor de Internet: {geoInfo.org}</p>
                     <p>Código Postal: {geoInfo.postal}</p>
                     <p>Zona Horaria: {geoInfo.timezone}</p>
+                    <SaveButton data={geoInfo} />
                 </div>
             ) : null}
         </div>
