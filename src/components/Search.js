@@ -26,6 +26,7 @@ const Search = () => {
     const [geoInfo, setGeoInfo] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isValidIPv4, setIsValidIPv4] = useState(true);
+    const [error, setError] = useState(null);
 
     const handleInputChange = (event) => {
         const inputValue = event.target.value;
@@ -35,15 +36,20 @@ const Search = () => {
 
     const handleSearch = async () => {
         setIsLoading(true);
+        setError(null);
         try {
             if (!isValidIPv4) {
                 return;
             }
-            //const data = await getDummyGeoInfo(ipv4);
+
             const data = await ApiService.getGeoInfo(ipv4);
+            if (data && data.status !== "OK") {
+                throw new Error("Error en la respuesta del servicio");
+            }
+
             setGeoInfo(data);
         } catch (error) {
-            // Manejar el error aquí si es necesario
+            setError("Error al obtener la información");
         } finally {
             setIsLoading(false);
         }
@@ -63,6 +69,8 @@ const Search = () => {
             </button>
             {isLoading ? (
                 <p>Cargando información...</p>
+            ) : error ? (
+                <p>{error}</p>
             ) : geoInfo ? (
                 <div>
                     <p>IP: {geoInfo.ip}</p>
